@@ -253,23 +253,25 @@ const MeditationTimer = () => {
         </div>
 
         {showSettings && (
-          <div className="mt-4 space-y-4 border-t pt-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">One minute timer</label>
-                <Switch
-                  checked={enableOneMinTimer}
-                  onCheckedChange={setEnableOneMinTimer}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Breath reminders</label>
-                <Switch
-                  checked={enableBreathReminders}
-                  onCheckedChange={setEnableBreathReminders}
-                />
-              </div>
+  <div className="mt-4 space-y-4 border-t pt-4">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium">One minute timer</label>
+        <Switch
+          checked={enableOneMinTimer}
+          onCheckedChange={setEnableOneMinTimer}
+          className={enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-200'}
+        />
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium">Breath reminders</label>
+        <Switch
+          checked={enableBreathReminders}
+          onCheckedChange={setEnableBreathReminders}
+          className={enableBreathReminders ? 'bg-blue-500' : 'bg-gray-200'}
+        />
+      </div>
               
               {enableBreathReminders && (
                 <div className="space-y-2">
