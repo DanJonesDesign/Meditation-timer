@@ -10,6 +10,19 @@ const MeditationTimer = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [enableOneMinTimer, setEnableOneMinTimer] = useState(true);
   const [enableBreathReminders, setEnableBreathReminders] = useState(false);
+
+
+// Add these functions after the state declarations
+const toggleOneMinTimer = () => {
+  console.log('Toggling one minute timer from:', enableOneMinTimer, 'to:', !enableOneMinTimer);
+  setEnableOneMinTimer(!enableOneMinTimer);
+};
+
+const toggleBreathReminders = () => {
+  console.log('Toggling breath reminders from:', enableBreathReminders, 'to:', !enableBreathReminders);
+  setEnableBreathReminders(!enableBreathReminders);
+};
+  
   const [reminderCount, setReminderCount] = useState(3);
   
   const audioContext = useRef(null);
@@ -65,33 +78,45 @@ const MeditationTimer = () => {
   };
 
   const setupReminders = () => {
-    reminderTimeouts.current.forEach(timeout => clearTimeout(timeout));
-    reminderTimeouts.current = [];
+  console.log('Setting up reminders:', {
+    enableOneMinTimer,
+    enableBreathReminders,
+    reminderCount,
+    duration
+  });
+  
+  reminderTimeouts.current.forEach(timeout => clearTimeout(timeout));
+  reminderTimeouts.current = [];
 
-    if (enableOneMinTimer) {
+  if (enableOneMinTimer) {
+    console.log('Setting up one minute reminder');
+    reminderTimeouts.current.push(
+      setTimeout(() => {
+        console.log('One minute reminder triggered');
+        if (isRunning) playSound('oneMin');
+      }, 60000)
+    );
+  }
+
+  if (enableBreathReminders && reminderCount > 0) {
+    console.log('Setting up breath reminders:', reminderCount);
+    const startTime = 60;
+    const endTime = duration - 10;
+    const availableTime = endTime - startTime;
+    const intervalTime = availableTime / (reminderCount + 1);
+    
+    for (let i = 1; i <= reminderCount; i++) {
+      const reminderTime = startTime + (intervalTime * i);
+      console.log(`Setting breath reminder ${i} for ${reminderTime} seconds`);
       reminderTimeouts.current.push(
         setTimeout(() => {
-          if (isRunning) playSound('oneMin');
-        }, 60000)
+          console.log(`Breath reminder ${i} triggered`);
+          if (isRunning) playSound('breath');
+        }, reminderTime * 1000)
       );
     }
-
-    if (enableBreathReminders && reminderCount > 0) {
-      const startTime = 60;
-      const endTime = duration - 10;
-      const availableTime = endTime - startTime;
-      const intervalTime = availableTime / (reminderCount + 1);
-      
-      for (let i = 1; i <= reminderCount; i++) {
-        const reminderTime = startTime + (intervalTime * i);
-        reminderTimeouts.current.push(
-          setTimeout(() => {
-            if (isRunning) playSound('breath');
-          }, reminderTime * 1000)
-        );
-      }
-    }
-  };
+  }
+};
 
   const startTimer = () => {
     if (!isRunning) {
@@ -212,7 +237,7 @@ const MeditationTimer = () => {
         <label className="text-sm">One minute timer</label>
         <button
           type="button"
-          onClick={() => setEnableOneMinTimer(!enableOneMinTimer)}
+          onClick={toggleOneMinTimer}
           className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
             enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-200'
           }`}
@@ -220,6 +245,23 @@ const MeditationTimer = () => {
           <div
             className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
               enableOneMinTimer ? 'translate-x-6' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <label className="text-sm">Breath reminders</label>
+        <button
+          type="button"
+          onClick={toggleBreathReminders}
+          className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
+            enableBreathReminders ? 'bg-blue-500' : 'bg-gray-200'
+          }`}
+        >
+          <div
+            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
+              enableBreathReminders ? 'translate-x-6' : 'translate-x-0'
             }`}
           />
         </button>
