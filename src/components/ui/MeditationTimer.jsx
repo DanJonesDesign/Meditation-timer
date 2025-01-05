@@ -285,124 +285,80 @@ const toggleBreathReminders = () => {
       </div>
 
 {showSettings && (
- <div className="flex items-center justify-between">
-  <label className="text-sm">One minute timer</label>
-  <div 
-    onClick={toggleOneMinTimer}
-    className={`cursor-pointer w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-300'}`}
-  >
-    <div 
-      className={`w-4 h-4 rounded-full bg-white transition-transform duration-200 ${enableOneMinTimer ? 'translate-x-5' : 'translate-x-0'}`}
-    />
-  </div>
-</div>
-
-<div className="flex items-center justify-between">
-  <label className="text-sm">Breath reminders</label>
-  <div 
-    onClick={toggleBreathReminders}
-    className={`cursor-pointer w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${enableBreathReminders ? 'bg-blue-500' : 'bg-gray-300'}`}
-  >
-    <div 
-      className={`w-4 h-4 rounded-full bg-white transition-transform duration-200 ${enableBreathReminders ? 'translate-x-5' : 'translate-x-0'}`}
-    />
-  </div>
-</div>
+  <div className="mt-4 space-y-4 border-t pt-4">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-sm">One minute timer</label>
+        <div 
+          onClick={toggleOneMinTimer}
+          className={`cursor-pointer w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-300'}`}
+        >
+          <div 
+            className={`w-4 h-4 rounded-full bg-white transition-transform duration-200 ${enableOneMinTimer ? 'translate-x-5' : 'translate-x-0'}`}
+          />
+        </div>
+      </div>
       
       <div className="flex items-center justify-between">
         <label className="text-sm">Breath reminders</label>
-        <button
-          type="button"
+        <div 
           onClick={toggleBreathReminders}
-          className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
-            enableBreathReminders ? 'bg-blue-500' : 'bg-gray-200'
-          }`}
+          className={`cursor-pointer w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${enableBreathReminders ? 'bg-blue-500' : 'bg-gray-300'}`}
         >
-          <div
-            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
-              enableBreathReminders ? 'translate-x-6' : 'translate-x-0'
-            }`}
+          <div 
+            className={`w-4 h-4 rounded-full bg-white transition-transform duration-200 ${enableBreathReminders ? 'translate-x-5' : 'translate-x-0'}`}
           />
-        </button>
+        </div>
       </div>
-      
-      <div className="flex items-center justify-between">
-        <label className="text-sm">Breath reminders</label>
-        <button
-          type="button"
-          onClick={() => setEnableBreathReminders(!enableBreathReminders)}
-          className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
-            enableBreathReminders ? 'bg-blue-500' : 'bg-gray-200'
-          }`}
-        >
-          <div
-            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
-              enableBreathReminders ? 'translate-x-6' : 'translate-x-0'
-            }`}
-          />
-        </button>
-      </div>
-            
-            {enableBreathReminders && (
-              <div className="space-y-2">
-                <label className="text-sm block">
-                  Number of reminders: {reminderCount}
-                </label>
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={reminderCount}
-                  onChange={(e) => setReminderCount(parseInt(e.target.value))}
-                  className="w-full"
-                />
-              </div>
-            )}
-          </div>
 
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium mb-2">Test Sounds</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => {
-                  initAudioContext();
-                  playSound('start');
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
-              >
-                Start Sound
-              </button>
-              <button
-                onClick={() => {
-                  initAudioContext();
-                  playSound('oneMin');
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
-              >
-                One Minute Sound
-              </button>
-              <button
-                onClick={() => {
-                  initAudioContext();
-                  playSound('breath');
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
-              >
-                Breath Reminder
-              </button>
-              <button
-                onClick={() => {
-                  initAudioContext();
-                  playSound('end');
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
-              >
-                End Sound
-              </button>
-            </div>
-          </div>
+      {enableBreathReminders && (
+        <div className="space-y-2">
+          <label className="text-sm block">
+            Number of reminders: {reminderCount}
+          </label>
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={reminderCount}
+            onChange={(e) => setReminderCount(parseInt(e.target.value))}
+            className="w-full"
+          />
         </div>
       )}
+    </div>
+
+    <div className="space-y-2">
+      <h3 className="text-sm font-medium mb-2">Test Sounds</h3>
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={() => playSound('start')}
+          className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
+        >
+          Start Sound
+        </button>
+        <button
+          onClick={() => playSound('oneMin')}
+          className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
+        >
+          One Minute Sound
+        </button>
+        <button
+          onClick={() => playSound('breath')}
+          className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
+        >
+          Breath Reminder
+        </button>
+        <button
+          onClick={() => playSound('end')}
+          className="px-3 py-1 text-sm border rounded hover:bg-gray-100"
+        >
+          End Sound
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
