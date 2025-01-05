@@ -1,39 +1,14 @@
-import * as React from "react"
+export function Card({ className, ...props }) {
+  return (
+    <div
+      className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
+      {...props}
+    />
+  )
+}
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={className}
-    {...props}
-  />
-))
-Card.displayName = "Card"
-
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={className}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
-
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={className}
-    {...props}
-  />
-))
-CardContent.displayName = "CardContent"
-
-export { Card, CardHeader, CardContent }
+export function CardContent({ className, ...props }) {
+  return (
+    <div className={`p-6 ${className}`} {...props} />
+  )
+}
