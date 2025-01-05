@@ -23,10 +23,22 @@ const MeditationTimer = () => {
   const timerRef = useRef(null);
   const reminderTimeouts = useRef
    useEffect(() => {
-    audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
+    // Only create AudioContext after user interaction
+    const handleFirstInteraction = () => {
+      if (!audioContext.current) {
+        audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    };
+
+    // Add event listeners for user interaction
+    window.addEventListener('click', handleFirstInteraction);
+    window.addEventListener('keydown', handleFirstInteraction);
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       reminderTimeouts.current.forEach(timeout => clearTimeout(timeout));
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('keydown', handleFirstInteraction);
     };
   }, []);
 
