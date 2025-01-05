@@ -1,5 +1,4 @@
-jsx
-import MeditationTimer from './components/MeditationTimer';
+import MeditationTimer from '../components/ui/MeditationTimer';
 
 export default function Home() {
   return (
