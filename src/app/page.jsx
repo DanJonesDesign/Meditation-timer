@@ -1,6 +1,6 @@
 "use client";
 
-import MeditationTimer from '../../components/ui/MeditationTimer';
+import MeditationTimer from '../components/ui/MeditationTimer';
 
 export default function Home() {
   return (
