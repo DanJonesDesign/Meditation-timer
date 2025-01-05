@@ -205,40 +205,42 @@ const MeditationTimer = () => {
         </div>
       </div>
 
-      {showSettings && (
-        <div className="mt-4 space-y-4 border-t pt-4">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm">One minute timer</label>
-              <button
-                role="switch"
-                aria-checked={enableOneMinTimer}
-                onClick={() => setEnableOneMinTimer(!enableOneMinTimer)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none
-                  ${enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-200'}`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                    ${enableOneMinTimer ? 'translate-x-6' : 'translate-x-1'}`}
-                />
-              </button>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <label className="text-sm">Breath reminders</label>
-              <button
-                role="switch"
-                aria-checked={enableBreathReminders}
-                onClick={() => setEnableBreathReminders(!enableBreathReminders)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none
-                  ${enableBreathReminders ? 'bg-blue-500' : 'bg-gray-200'}`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                    ${enableBreathReminders ? 'translate-x-6' : 'translate-x-1'}`}
-                />
-              </button>
-            </div>
+{showSettings && (
+  <div className="mt-4 space-y-4 border-t pt-4">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-sm">One minute timer</label>
+        <button
+          type="button"
+          onClick={() => setEnableOneMinTimer(!enableOneMinTimer)}
+          className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
+            enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-200'
+          }`}
+        >
+          <div
+            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
+              enableOneMinTimer ? 'translate-x-6' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <label className="text-sm">Breath reminders</label>
+        <button
+          type="button"
+          onClick={() => setEnableBreathReminders(!enableBreathReminders)}
+          className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
+            enableBreathReminders ? 'bg-blue-500' : 'bg-gray-200'
+          }`}
+        >
+          <div
+            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
+              enableBreathReminders ? 'translate-x-6' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
             
             {enableBreathReminders && (
               <div className="space-y-2">
