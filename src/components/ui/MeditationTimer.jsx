@@ -37,8 +37,60 @@ const toggleBreathReminders = () => {
   };
 
   const playSound = async (type = 'start') => {
-    if (!audioContext.current) return;
-    const ctx = audioContext.current;
+  console.log('Attempting to play sound:', type);
+  
+  if (!audioContext.current) {
+    console.log('Initializing audio context');
+    audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  
+  const ctx = audioContext.current;
+  
+  // Different configurations for different sound types
+  const sounds = {
+    start: { baseFreq: 320, harmonics: [1, 1.5, 2, 2.667], duration: 4 },
+    end: { baseFreq: 280, harmonics: [1, 1.25, 1.5, 2], duration: 5 },
+    oneMin: { baseFreq: 360, harmonics: [1, 1.25, 1.5, 1.667], duration: 3 },
+    breath: { baseFreq: 400, harmonics: [1, 1.2, 1.33, 1.5], duration: 2 }
+  };
+  
+  const config = sounds[type];
+  console.log('Playing sound with config:', config);
+  
+  try {
+    const oscillators = config.harmonics.map((harmonic, i) => {
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      osc.frequency.value = config.baseFreq * harmonic;
+      osc.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(
+        bellVolume * (0.5 ** i) * 0.3,
+        ctx.currentTime + 0.1
+      );
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        ctx.currentTime + config.duration
+      );
+      
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      return { osc, gainNode };
+    });
+    
+    oscillators.forEach(({ osc }) => {
+      osc.start();
+      osc.stop(ctx.currentTime + config.duration);
+    });
+    
+    console.log('Sound played successfully');
+  } catch (error) {
+    console.error('Error playing sound:', error);
+  }
+};
     
     const sounds = {
       start: { baseFreq: 320, harmonics: [1, 1.5, 2, 2.667], duration: 4 },
@@ -89,14 +141,16 @@ const toggleBreathReminders = () => {
   reminderTimeouts.current = [];
 
   if (enableOneMinTimer) {
-    console.log('Setting up one minute reminder');
-    reminderTimeouts.current.push(
-      setTimeout(() => {
-        console.log('One minute reminder triggered');
-        if (isRunning) playSound('oneMin');
-      }, 60000)
-    );
-  }
+  console.log('Setting up one minute reminder');
+  const oneMinTimeout = setTimeout(() => {
+    console.log('One minute reminder triggered');
+    if (isRunning) {
+      console.log('Playing one minute sound');
+      playSound('oneMin');
+    }
+  }, 60000);
+  reminderTimeouts.current.push(oneMinTimeout);
+}
 
   if (enableBreathReminders && reminderCount > 0) {
     console.log('Setting up breath reminders:', reminderCount);
@@ -231,24 +285,29 @@ const toggleBreathReminders = () => {
       </div>
 
 {showSettings && (
-  <div className="mt-4 space-y-4 border-t pt-4">
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <label className="text-sm">One minute timer</label>
-        <button
-          type="button"
-          onClick={toggleOneMinTimer}
-          className={`w-12 h-6 rounded-full p-1 transition-colors duration-200 ${
-            enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-200'
-          }`}
-        >
-          <div
-            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-200 ${
-              enableOneMinTimer ? 'translate-x-6' : 'translate-x-0'
-            }`}
-          />
-        </button>
-      </div>
+ <div className="flex items-center justify-between">
+  <label className="text-sm">One minute timer</label>
+  <div 
+    onClick={toggleOneMinTimer}
+    className={`cursor-pointer w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${enableOneMinTimer ? 'bg-blue-500' : 'bg-gray-300'}`}
+  >
+    <div 
+      className={`w-4 h-4 rounded-full bg-white transition-transform duration-200 ${enableOneMinTimer ? 'translate-x-5' : 'translate-x-0'}`}
+    />
+  </div>
+</div>
+
+<div className="flex items-center justify-between">
+  <label className="text-sm">Breath reminders</label>
+  <div 
+    onClick={toggleBreathReminders}
+    className={`cursor-pointer w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${enableBreathReminders ? 'bg-blue-500' : 'bg-gray-300'}`}
+  >
+    <div 
+      className={`w-4 h-4 rounded-full bg-white transition-transform duration-200 ${enableBreathReminders ? 'translate-x-5' : 'translate-x-0'}`}
+    />
+  </div>
+</div>
       
       <div className="flex items-center justify-between">
         <label className="text-sm">Breath reminders</label>
