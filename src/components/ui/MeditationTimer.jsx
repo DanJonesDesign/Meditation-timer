@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '../ui/card';
+import { Button } from '../ui/button';
 import { Bell, Pause, Play, RefreshCcw, Settings } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
+import { Switch } from '../ui/switch';
+import { Slider } from '../ui/slider';
 
 const MeditationTimer = () => {
   const [duration, setDuration] = useState(300); // 5 minutes in seconds
