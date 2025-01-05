@@ -300,4 +300,3 @@ const MeditationTimer = () => {
 };
 
 export default MeditationTimer;
-export default MeditationTimer;
